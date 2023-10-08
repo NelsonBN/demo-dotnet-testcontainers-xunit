@@ -1,12 +1,12 @@
 ﻿using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.DeleteProduct;
+namespace Integration.Tests.UsesCases.duplicated;
 
-public sealed class DeleteProductTests : IntegrationTests
+public sealed class DeleteProduct13Tests : IntegrationTests
 {
     private readonly IntegrationTestsFactory _factory;
 
-    public DeleteProductTests(IntegrationTestsFactory factory)
+    public DeleteProduct13Tests(IntegrationTestsFactory factory)
         => _factory = factory;
 
 

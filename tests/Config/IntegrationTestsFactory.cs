@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MySql.Data.MySqlClient;
 
-namespace Demo.Tests.Config;
+namespace Integration.Tests.Config;
 
 public sealed class IntegrationTestsFactory : WebApplicationFactory<ProductRequest>, IAsyncLifetime
 {
@@ -18,7 +18,8 @@ public sealed class IntegrationTestsFactory : WebApplicationFactory<ProductReque
     private const string DB_ROOT_PASSWORD = "testpassword";
     private const int DB_CONTAINER_PORT = 3306;
 
-    private readonly IContainer _dbContainer = default!;
+    private readonly IContainer _dbContainer;
+    private static readonly Semaphore _semaphore = new(3, 3);
 
 
     public IntegrationTestsFactory()
@@ -45,11 +46,21 @@ public sealed class IntegrationTestsFactory : WebApplicationFactory<ProductReque
         });
 
 
+
+
     public async Task InitializeAsync()
-        => await _dbContainer.StartAsync().ConfigureAwait(false);
+    {
+        _semaphore.WaitOne();
+        ;
+        await _dbContainer.StartAsync().ConfigureAwait(false);
+    }
 
     public new async Task DisposeAsync()
-        => await _dbContainer.StopAsync().ConfigureAwait(false);
+    {
+        await _dbContainer.StopAsync().ConfigureAwait(false);
+        _semaphore.Release();
+        ;
+    }
 }
 
 public abstract class IntegrationTests : IClassFixture<IntegrationTestsFactory> { }

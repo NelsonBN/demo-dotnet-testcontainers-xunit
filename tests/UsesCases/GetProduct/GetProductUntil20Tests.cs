@@ -1,4 +1,4 @@
-﻿using Demo.Tests.Config;
+﻿using Integration.Tests.Config;
 
 namespace Demo.Tests.UsesCases.GetProduct;
 

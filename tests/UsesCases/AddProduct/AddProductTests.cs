@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
 using Bogus;
-using Demo.Tests.Config;
+using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.AddProduct;
+namespace Integration.Tests.UsesCases.AddProduct;
 
 public sealed class AddProductTests : IntegrationTests
 {
