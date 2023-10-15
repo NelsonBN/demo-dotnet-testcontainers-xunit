@@ -1,3 +1,3 @@
-# How can configure the parallelism of xUnit tests to run the integration tests with Testcontainers
+# How can run integration tests with Testcontainers and xUnit
 
 TODO
