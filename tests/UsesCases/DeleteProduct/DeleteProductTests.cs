@@ -1,13 +1,17 @@
 ﻿using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.DeleteProduct;
+namespace Integration.Tests.UsesCases.DeleteProduct;
 
-public sealed class DeleteProductTests : IntegrationTests
+[Collection(nameof(CollectionIntegrationTests))]
+public sealed class DeleteProductTests
 {
     private readonly IntegrationTestsFactory _factory;
 
     public DeleteProductTests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
 
     [Fact]

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -40,7 +40,8 @@
 
 
   <ItemGroup>
-    <None Include="..\data\db-init.sql" Link="Data\db-init.sql" CopyToOutputDirectory="Always" />
+    <None Include="..\data\01-db-init.sql" Link="Data\01-db-init.sql" CopyToOutputDirectory="Always" />
+    <None Include="..\data\02-db-prepare.sql" Link="Data\02-db-prepare.sql" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 

@@ -4,12 +4,16 @@ using Integration.Tests.Config;
 
 namespace Integration.Tests.UsesCases.AddProduct;
 
-public sealed class AddProductTests : IntegrationTests
+[Collection(nameof(CollectionIntegrationTests))]
+public sealed class AddProductTests
 {
     private readonly IntegrationTestsFactory _factory;
 
     public AddProductTests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
 
 

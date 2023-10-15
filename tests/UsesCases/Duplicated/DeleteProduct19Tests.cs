@@ -2,12 +2,16 @@
 
 namespace Integration.Tests.UsesCases.duplicated;
 
-public sealed class DeleteProduct19Tests : IntegrationTests
+[Collection(nameof(CollectionIntegrationTests))]
+public sealed class DeleteProduct19Tests
 {
     private readonly IntegrationTestsFactory _factory;
 
     public DeleteProduct19Tests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
 
     [Fact]

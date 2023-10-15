@@ -1,6 +1,6 @@
 ﻿using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.GetProducts;
+namespace Integration.Tests.UsesCases.GetProducts;
 
 [Collection(nameof(CollectionIntegrationTests))]
 public sealed class ProductsTime2Tests
@@ -8,7 +8,10 @@ public sealed class ProductsTime2Tests
     private readonly IntegrationTestsFactory _factory;
 
     public ProductsTime2Tests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
 
     [Fact]

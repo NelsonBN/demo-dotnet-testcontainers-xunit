@@ -1,6 +1,6 @@
 ﻿using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.GetProduct;
+namespace Integration.Tests.UsesCases.GetProduct;
 
 [Collection(nameof(CollectionIntegrationTests))]
 public sealed class GetProductUntil20Tests
@@ -8,7 +8,10 @@ public sealed class GetProductUntil20Tests
     private readonly IntegrationTestsFactory _factory;
 
     public GetProductUntil20Tests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
 
     [Fact]

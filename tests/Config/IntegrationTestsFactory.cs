@@ -19,11 +19,11 @@ public sealed class IntegrationTestsFactory : WebApplicationFactory<ProductReque
     private const int DB_CONTAINER_PORT = 3306;
 
     private readonly IContainer _dbContainer;
-    private static readonly Semaphore _semaphore = new(3, 3);
-
+    private readonly string _dbSQL;
 
     public IntegrationTestsFactory()
-        => _dbContainer = new ContainerBuilder()
+    {
+        _dbContainer = new ContainerBuilder()
             .WithImage(DB_IMAGE)
             .WithEnvironment("MYSQL_DATABASE", DB_DATABASE)
             .WithEnvironment("MYSQL_ROOT_PASSWORD", DB_ROOT_PASSWORD)
@@ -32,13 +32,16 @@ public sealed class IntegrationTestsFactory : WebApplicationFactory<ProductReque
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(DB_CONTAINER_PORT))
             .Build();
 
+        _dbSQL = File.ReadAllText("./Data/02-db-prepare.sql");
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
         => builder.ConfigureTestServices(services =>
         {
             services.RemoveAll(typeof(IDbConnection));
             services.AddScoped<IDbConnection>(sp =>
             {
-                var connection = new MySqlConnection($"server=localhost; Port={_dbContainer.GetMappedPublicPort(DB_CONTAINER_PORT)}; database={DB_DATABASE}; uid={DB_USERNAME}; password={DB_ROOT_PASSWORD};");
+                var connection = new MySqlConnection(_getDBConnectionString());
                 connection.Open();
 
                 return connection;
@@ -46,24 +49,27 @@ public sealed class IntegrationTestsFactory : WebApplicationFactory<ProductReque
         });
 
 
+    public void PrepareDatabase()
+    {
+        using var connection = new MySqlConnection(_getDBConnectionString());
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = _dbSQL;
+        command.ExecuteNonQuery();
+    }
+
+
 
 
     public async Task InitializeAsync()
-    {
-        _semaphore.WaitOne();
-        ;
-        await _dbContainer.StartAsync().ConfigureAwait(false);
-    }
+        => await _dbContainer.StartAsync().ConfigureAwait(false);
 
     public new async Task DisposeAsync()
-    {
-        await _dbContainer.StopAsync().ConfigureAwait(false);
-        _semaphore.Release();
-        ;
-    }
-}
+        => await _dbContainer.StopAsync().ConfigureAwait(false);
 
-public abstract class IntegrationTests : IClassFixture<IntegrationTestsFactory> { }
+    private string _getDBConnectionString() => $"server=localhost; Port={_dbContainer.GetMappedPublicPort(DB_CONTAINER_PORT)}; database={DB_DATABASE}; uid={DB_USERNAME}; password={DB_ROOT_PASSWORD};";
+}
 
 [CollectionDefinition(nameof(CollectionIntegrationTests))]
 public sealed class CollectionIntegrationTests : ICollectionFixture<IntegrationTestsFactory> { }

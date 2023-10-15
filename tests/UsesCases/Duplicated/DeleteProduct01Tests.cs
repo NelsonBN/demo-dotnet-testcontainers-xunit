@@ -2,13 +2,16 @@
 
 namespace Integration.Tests.UsesCases.duplicated;
 
-public sealed class DeleteProduct01Tests : IntegrationTests
+[Collection(nameof(CollectionIntegrationTests))]
+public sealed class DeleteProduct01Tests
 {
     private readonly IntegrationTestsFactory _factory;
 
     public DeleteProduct01Tests(IntegrationTestsFactory factory)
-        => _factory = factory;
-
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
     [Fact]
     public async Task ProductId41_Delete_StatusCode204()

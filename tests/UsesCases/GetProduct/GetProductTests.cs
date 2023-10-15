@@ -1,6 +1,6 @@
 ﻿using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.GetProduct;
+namespace Integration.Tests.UsesCases.GetProduct;
 
 [Collection(nameof(CollectionIntegrationTests))]
 public sealed class GetProductTests
@@ -8,7 +8,11 @@ public sealed class GetProductTests
     private readonly IntegrationTestsFactory _factory;
 
     public GetProductTests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
+
 
     [Fact]
     public async Task ProductId41_Get_StatusCode200AndProduct()

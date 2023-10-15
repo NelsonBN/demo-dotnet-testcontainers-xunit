@@ -2,14 +2,18 @@
 using Bogus;
 using Integration.Tests.Config;
 
-namespace Demo.Tests.UsesCases.UpdateProduct;
+namespace Integration.Tests.UsesCases.UpdateProduct;
 
-public sealed class UpdateProductTests : IntegrationTests
+[Collection(nameof(CollectionIntegrationTests))]
+public sealed class UpdateProductTests
 {
     private readonly IntegrationTestsFactory _factory;
 
     public UpdateProductTests(IntegrationTestsFactory factory)
-        => _factory = factory;
+    {
+        _factory = factory;
+        _factory.PrepareDatabase();
+    }
 
 
     [Fact]
